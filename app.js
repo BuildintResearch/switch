@@ -1,19 +1,49 @@
 const ewelink = require('ewelink-api');
-// const functions = require('firebase-functions')
 var cors = require('cors')
+var serviceAccount = "serviceAccountKey.json"
+const admin = require('firebase-admin')
 const express = require('express');
 const app = express()
 const port = 3001
+let username = ""
+let pass = ""
 app.use(cors())
 
 let access_tokeen = ""
 let access_region = ""
 
+const firebase = admin.initializeApp ({
+  apiKey: "AIzaSyCnZNqVlR6UdIdL4OBzO731Mt1W7lV5d0I",
+  authDomain: "buildint-rnd.firebaseapp.com",
+  databaseURL: "https://buildint-rnd-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "buildint-rnd",
+  storageBucket: "buildint-rnd.appspot.com",
+  messagingSenderId: "529209549403",
+  appId: "1:529209549403:web:689c5de9548ae5af60957e",
+  measurementId: "G-CZQQG8VSDG",
+  credential: admin.credential.cert(serviceAccount)
+});
+
+app.get('/accountcredentials/:arg',async(req,res) => {
+
+  var arg = req.params.arg;
+  const resp = await firebase.database().ref("ewelink-account").child(arg).once("value")
+  .then((data)=>{
+    cred = JSON.stringify(data)
+    console.log(cred)
+    console.log(cred.split(":")[0].split('"')[1])
+    console.log(cred.split(":")[1].split('"')[0])
+    username = cred.split(":")[0].split('"')[1]
+    pass = cred.split(":")[1].split('"')[0]
+    return (res.json({'email':username, 'pass':pass}))
+  });
+})
+
 app.get('/getdevices',async (req, res) => {
   try {
       const connection = new ewelink({
-        email: 'aakashsingh688@gmail.com',
-        password: '95A@singh',
+        email : username,
+        password : pass,
         region: 'as',
       });
     const auth = await connection.getCredentials();
@@ -96,8 +126,8 @@ app.post('/toggle/:id/:state', async (req,res) => {
   }
 })
 
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`)
-// })
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`)
+})
 
-app.listen(process.env.PORT || 5000)
+// app.listen(process.env.PORT || 5000)

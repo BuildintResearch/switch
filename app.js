@@ -29,6 +29,7 @@ app.get('/accountcredentials/:arg',async(req,res) => {
   var arg = req.params.arg;
   const resp = await firebase.database().ref("ewelink-account").child(arg).once("value")
   .then((data)=>{
+    try{
     cred = JSON.stringify(data)
     console.log(cred)
     console.log(cred.split(":")[0].split('"')[1])
@@ -36,6 +37,11 @@ app.get('/accountcredentials/:arg',async(req,res) => {
     username = cred.split(":")[0].split('"')[1]
     pass = cred.split(":")[1].split('"')[0]
     return (res.json({'email':username, 'pass':pass}))
+    }
+    catch(e){
+      console.log(e)
+      return (res.json({'response':'user not found'}))
+    }
   });
 })
 
@@ -126,8 +132,8 @@ app.post('/toggle/:id/:state', async (req,res) => {
   }
 })
 
-app.listen(port, () => {
-  console.log(`App listening on port ${port}`)
-})
+// app.listen(port, () => {
+//   console.log(`App listening on port ${port}`)
+// })
 
-// app.listen(process.env.PORT || 5000)
+app.listen(process.env.PORT || 5000)

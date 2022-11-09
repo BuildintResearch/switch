@@ -9,9 +9,6 @@ let username = ""
 let pass = ""
 app.use(cors())
 
-let access_tokeen = ""
-let access_region = ""
-
 const firebase = admin.initializeApp ({
   apiKey: "AIzaSyCnZNqVlR6UdIdL4OBzO731Mt1W7lV5d0I",
   authDomain: "buildint-rnd.firebaseapp.com",
@@ -52,12 +49,7 @@ app.get('/getdevices',async (req, res) => {
         password : pass,
         region: 'as',
       });
-    const auth = await connection.getCredentials();
-    console.log('access token: ', auth.at);
-    console.log('api key: ', auth.user.apikey);
-    console.log('region: ', auth.region);
-    access_tokeen = auth.at
-    access_region = auth.region
+
       /* get all devices */
         const devices = await connection.getDevices();
         const dlist = []
@@ -75,10 +67,11 @@ app.get('/getdevices',async (req, res) => {
 
 app.get('/getdevices/state',async (req, res) => {
   try {
-      const connection = new ewelink({
-        at: access_tokeen,
-        region: access_region
-      });
+    const connection = new ewelink({
+      email : username,
+      password : pass,
+      region: 'as',
+    });
       /* get all devices */
         const devices = await connection.getDevices();
         const dlist = []
@@ -95,10 +88,11 @@ app.get('/getdevices/state',async (req, res) => {
 
 app.get('/getstate/:id',async (req, res,) => {
   try {
-      const connection = new ewelink({
-        at: access_tokeen,
-        region: access_region
-      });
+    const connection = new ewelink({
+      email : username,
+      password : pass,
+      region: 'as',
+    });
       var id = req.params.id;
       state = await connection.getDevicePowerState(id);
     return res.json({'response':state})
@@ -111,8 +105,9 @@ app.post('/toggle/:id/:state', async (req,res) => {
   // console.log("token>>" + access_tokeen)
   try {
     const connection = new ewelink({
-      at: access_tokeen,
-      region: access_region
+      email : username,
+      password : pass,
+      region: 'as',
     });
     var id = req.params.id;
     var state = req.params.state

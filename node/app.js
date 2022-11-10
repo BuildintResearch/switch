@@ -5,8 +5,9 @@ const admin = require('firebase-admin')
 const express = require('express');
 const app = express()
 const port = 3001
-let username = ""
-let pass = ""
+const hostname = '127.0.0.1'
+let username1 = ""
+let pass1 = ""
 app.use(cors())
 
 const firebase = admin.initializeApp ({
@@ -31,9 +32,10 @@ app.get('/accountcredentials/:arg',async(req,res) => {
     console.log(cred)
     console.log(cred.split(":")[0].split('"')[1])
     console.log(cred.split(":")[1].split('"')[0])
-    username = cred.split(":")[0].split('"')[1]
-    pass = cred.split(":")[1].split('"')[0]
-    return (res.json({'email':username, 'pass':pass}))
+
+    username1 = cred.split(":")[0].split('"')[1]
+    pass1 = cred.split(":")[1].split('"')[0]
+    return (res.json({'email':username1, 'pass':pass1}))
     }
     catch(e){
       console.log(e)
@@ -42,7 +44,9 @@ app.get('/accountcredentials/:arg',async(req,res) => {
   });
 })
 
-app.get('/getdevices',async (req, res) => {
+app.get('/getdevices/:user/:pass',async (req, res) => {
+  var username = req.params.user
+  var pass = req.params.pass
   try {
       const connection = new ewelink({
         email : username,
@@ -65,7 +69,9 @@ app.get('/getdevices',async (req, res) => {
 })
 
 
-app.get('/getdevices/state',async (req, res) => {
+app.get('/getdevices/state/:user/:pass',async (req, res) => {
+  var username = req.params.user
+  var pass = req.params.pass  
   try {
     const connection = new ewelink({
       email : username,
@@ -86,7 +92,10 @@ app.get('/getdevices/state',async (req, res) => {
   }
 })
 
-app.get('/getstate/:id',async (req, res,) => {
+
+app.get('/getstate/:id/:user/:pass',async (req, res,) => {
+  var username = req.params.user
+  var pass = req.params.pass
   try {
     const connection = new ewelink({
       email : username,
@@ -101,8 +110,10 @@ app.get('/getstate/:id',async (req, res,) => {
   }
 })
 
-app.post('/toggle/:id/:state', async (req,res) => {
-  // console.log("token>>" + access_tokeen)
+
+app.post('/toggle/:id/:state/:user/:pass', async (req,res) => {
+  var username = req.params.user
+  var pass = req.params.pass
   try {
     const connection = new ewelink({
       email : username,
@@ -127,8 +138,8 @@ app.post('/toggle/:id/:state', async (req,res) => {
   }
 })
 
-// app.listen(port, () => {
-//   console.log(`App listening on port ${port}`)
-// })
+app.listen(port, hostname, () => {
+  console.log(`App listening on port ${port}`)
+})
 
-app.listen(process.env.PORT || 5000)
+// app.listen(process.env.PORT || 5000)

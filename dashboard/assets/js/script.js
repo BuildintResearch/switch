@@ -1,5 +1,7 @@
 email = localStorage.getItem('uname')
 pass = localStorage.getItem('pwd')
+let did_list = []
+let did_name = []
 
 async function btn_toggle(clicked_id){
     a = clicked_id.split(" ")[1]
@@ -22,8 +24,7 @@ async function btn_toggle(clicked_id){
     }
 }
 
-let did_list = []
-let did_name = [] // global
+ // global
 window.onload = async function get_btn(){
     console.log('running get_btn func');
     const url = 'https://switch.aakashsingh.tech/getdevices'+"/"+email+"/"+pass;
@@ -37,7 +38,7 @@ window.onload = async function get_btn(){
         var len = data.response.length;
         // console.log(len)
         for (let i=0;i<len;i++){
-            var did_value = data.response[i]['name'];
+            var did_value = data.response[i]['name'].trim();   // needs to be in specific format
             var status = data.response[i]['online'];
             var switch_status = data.response[i]["params"]["switch"]
             // console.log(did_value, switch_status)
@@ -149,7 +150,7 @@ function search_filter(clicked_id){
     // console.log(search_element)
     var element = document.getElementsByClassName(search_element)[0]
     for(let i=0;i<did_name.length;i++){
-        x= document.getElementById(did_list[i])
+        x = document.getElementById(did_list[i])
         if(search_element == did_name[i]){
            x.style.display="block"
         }

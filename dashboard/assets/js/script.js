@@ -14,7 +14,7 @@ const auth = firebase.auth();
 
 firebase.auth().onAuthStateChanged(user => {
     if(!user) {
-        window.location = 'index.html';
+        window.location = 'login.html';
     }
 
 });
@@ -22,7 +22,7 @@ firebase.auth().onAuthStateChanged(user => {
 function signout(){
     auth.signOut()
     .then(() => {
-        window.location.href = "index.html"
+        window.location.href = "login.html"
     })
     .catch((error) => {
         alert("error signning out, please try again")

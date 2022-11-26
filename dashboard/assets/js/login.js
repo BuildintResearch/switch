@@ -60,12 +60,12 @@ function login(email,password){
 
 // redirect to homepage on login
 function showHomepage(){
-  window.location.href="dashboard.html";
+  window.location.href="https://switch.buildint.co";
 };
 
 firebase.auth().onAuthStateChanged(user => {
   if(user) {
-      window.location = 'dashboard.html'; //After successful login, user will be redirected to home.html
+      window.location = 'https://switch.buildint.co';
   }
   
 });

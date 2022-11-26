@@ -63,13 +63,9 @@ function showHomepage(){
   window.location.href="dashboard.html";
 };
 
-// signout and redirect to login page
-function signout(){
-  auth.signOut()
-  .then(() => {
-    window.location.href = "index.html"
-  })
-  .catch((error) => {
-    alert("error signning out, please try again")
-  })
-}
+firebase.auth().onAuthStateChanged(user => {
+  if(user) {
+      window.location = 'dashboard.html'; //After successful login, user will be redirected to home.html
+  }
+  
+});

@@ -1,3 +1,35 @@
+var firebaseConfig = {
+    apiKey: "AIzaSyCnZNqVlR6UdIdL4OBzO731Mt1W7lV5d0I",
+    authDomain: "buildint-rnd.firebaseapp.com",
+    databaseURL: "https://buildint-rnd-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "buildint-rnd",
+    storageBucket: "buildint-rnd.appspot.com",
+    messagingSenderId: "529209549403",
+    appId: "1:529209549403:web:689c5de9548ae5af60957e",
+    measurementId: "G-CZQQG8VSDG"
+  };
+  
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+firebase.auth().onAuthStateChanged(user => {
+    if(!user) {
+        window.location = 'index.html';
+    }
+
+});
+
+function signout(){
+    auth.signOut()
+    .then(() => {
+        window.location.href = "index.html"
+    })
+    .catch((error) => {
+        alert("error signning out, please try again")
+    })
+}
+  
+
 email = localStorage.getItem('uname')
 pass = localStorage.getItem('pwd')
 let did_list = []
@@ -37,7 +69,7 @@ window.onload = async function get_btn(){
         var list_wrapper = document.getElementById('devices-list')
         var len = data.response.length;
         // console.log(len)
-        for (let i=0;i<len;i++){
+        for (let i=0;i<data.response.length;i++){
             var did_value = data.response[i]['name'].trim();   // needs to be in specific format
             var status = data.response[i]['online'];
             var switch_status = data.response[i]["params"]["switch"]
